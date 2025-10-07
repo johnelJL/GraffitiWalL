@@ -18,6 +18,14 @@ A collaborative graffiti experience for events. Display the wall on a large scre
    npm install
    ```
 
+   If registry access is blocked (common in offline or firewalled environments), you can unpack the pre-bundled dependencies instead:
+
+   ```bash
+   npm run setup-offline
+   ```
+
+   The command decodes `offline/node_modules.base64` (a base64-encoded tarball) into `node_modules/` so `npm start` works without contacting the public registry.
+
 2. Start the collaboration server.
 
    ```bash
@@ -40,9 +48,11 @@ public/
   index.html      # video wall
   join.html       # registration form
   paint.html      # painter controls
+  styles.css      # shared styling
   js/             # browser logic
+offline/
+  node_modules.base64  # base64-encoded offline dependency bundle used by npm run setup-offline
 server.js         # express + socket.io server
-styles.css        # shared styling
 ```
 
 Enjoy the pop-up street art session! ✨
