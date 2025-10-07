@@ -1,41 +1,48 @@
-# Graffiti WalL
+# Graffiti Wall
 
-A playful single-page web app where anyone can leave a colorful note on the shared graffiti wall. Notes are stored locally in the browser so you can experiment freely without a backend.
+A collaborative graffiti experience for events. Display the wall on a large screen and let visitors join from their phones by scanning the QR code. Every spray action appears live on the video wall.
 
 ## Features
 
-- ✏️ Compose notes with your name, message, and a color theme
-- 🧠 Get inspiration with the "Surprise" prompt generator
-- ❤️ Like notes and see real-time counts
-- 🗑️ Delete individual notes or clear the entire wall
-- 💾 Notes persist in `localStorage` across visits on the same browser
+- 📺 **Video wall view** – Hosts run `/` to show the shared canvas and QR code.
+- 📱 **Join flow** – Guests enter their name, email, and agree to the guidelines before painting.
+- 🎨 **Spray controls** – Five preset colors and an adjustable spray radius feel like a can of paint.
+- 🔄 **Real-time sync** – Built with Socket.IO so every mark is broadcast instantly to every connected screen.
+- 🧹 **Host clear** – Trigger a full reset of the wall from the painter page when needed.
 
 ## Getting started
 
-1. Open `index.html` in your favorite browser.
-2. Start adding messages to the wall.
+1. Install dependencies.
 
-No build step required—everything runs directly in the browser.
+   ```bash
+   npm install
+   ```
 
-## Testing the experience
+2. Start the collaboration server.
 
-Want to walk through the full graffiti wall flow? Follow these steps for a quick manual check:
+   ```bash
+   npm start
+   ```
 
-1. **Launch the wall**
-   - Either double-click `index.html` or run a local server with `npx serve` (requires Node.js) from the project root and open the provided URL.
-2. **Add a note**
-   - Enter a name, pick a color, type a message, and submit. Confirm your note appears instantly in the "Latest tags" panel.
-3. **Engage with reactions**
-   - Click the heart on the new note and verify the like counter increments and persists after refreshing the page.
-4. **Try the prompt generator**
-   - Press "Surprise me" to pre-fill the composer with a random idea, then tweak it as desired before posting.
-5. **Clean up**
-   - Remove a single note via its trash icon, then clear the entire wall using the "Clear wall" button. Refresh once more to ensure everything stays cleared.
-
-These steps exercise every interactive control so you can be confident the whole activation works end to end.
+3. Open the wall view (defaults to [`http://localhost:3000/`](http://localhost:3000/)) on the main display.
+4. Ask guests to scan the QR code or visit [`http://localhost:3000/join`](http://localhost:3000/join) on their devices.
 
 ## Development tips
 
-- The project uses vanilla JavaScript and CSS.
-- Notes are stored under the `graffiti-wall-notes` key in `localStorage`. You can clear it via the "Clear wall" button or through your browser devtools.
-- To reset likes or messages manually, remove the item from storage and reload the page.
+- Use `npm run dev` for automatic restarts when editing the server.
+- Sprays are stored in memory only. Restarting the server clears the canvas for everyone.
+- The wall automatically adapts to the browser window size; resize the window after connecting if you change the display resolution.
+
+## Folder structure
+
+```
+public/
+  index.html      # video wall
+  join.html       # registration form
+  paint.html      # painter controls
+  js/             # browser logic
+server.js         # express + socket.io server
+styles.css        # shared styling
+```
+
+Enjoy the pop-up street art session! ✨

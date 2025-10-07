@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Spray the Graffiti Wall</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body class="page page--paint">
+    <header class="paint-header">
+      <div class="identity" id="identity"></div>
+      <button class="button button--ghost" id="clear-button" type="button">Clear wall (host only)</button>
+    </header>
+    <main class="paint-layout">
+      <section class="paint-canvas-wrapper" aria-label="Shared graffiti canvas">
+        <canvas id="paint-canvas" class="wall-canvas" aria-live="polite"></canvas>
+      </section>
+      <section class="paint-controls" aria-label="Spray controls">
+        <div class="controls-group">
+          <h2>Spray color</h2>
+          <div class="color-options" role="radiogroup">
+            <button class="color-chip is-active" type="button" data-color="#ff7a7a" aria-label="Flare red"></button>
+            <button class="color-chip" type="button" data-color="#f9c74f" aria-label="Sunny yellow"></button>
+            <button class="color-chip" type="button" data-color="#43aa8b" aria-label="Fresh green"></button>
+            <button class="color-chip" type="button" data-color="#577590" aria-label="Ocean blue"></button>
+            <button class="color-chip" type="button" data-color="#f94144" aria-label="Crimson"></button>
+          </div>
+        </div>
+        <div class="controls-group">
+          <h2>Spray size</h2>
+          <label class="slider">
+            <span>Radius: <strong id="size-label">medium</strong></span>
+            <input type="range" id="brush-size" min="0.03" max="0.12" step="0.01" value="0.05" />
+          </label>
+        </div>
+        <p class="hint">Press and drag anywhere on the canvas. Everything you spray appears instantly on the video wall.</p>
+      </section>
+    </main>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="module" src="/js/painter.js"></script>
+  </body>
+</html>

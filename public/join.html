@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Join the Graffiti Wall</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body class="page page--join">
+    <main class="join-card">
+      <h1>Join the Graffiti Wall</h1>
+      <p>Fill in your details to jump into the shared canvas.</p>
+      <form id="join-form" class="join-form" novalidate>
+        <div class="field">
+          <label for="name">Name</label>
+          <input id="name" name="name" type="text" maxlength="60" required placeholder="Your name" />
+          <p class="field__error" data-error-for="name"></p>
+        </div>
+        <div class="field">
+          <label for="email">Email</label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            maxlength="120"
+            required
+            placeholder="you@example.com"
+            autocomplete="email"
+          />
+          <p class="field__error" data-error-for="email"></p>
+        </div>
+        <label class="checkbox">
+          <input type="checkbox" name="terms" id="terms" required />
+          <span>I agree to respect the space and the community guidelines.</span>
+        </label>
+        <p class="field__error" data-error-for="terms"></p>
+        <button type="submit" class="button">Start spraying</button>
+      </form>
+    </main>
+    <script type="module" src="/js/join.js"></script>
+  </body>
+</html>
