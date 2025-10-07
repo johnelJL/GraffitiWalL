@@ -1,41 +1,39 @@
-# Graffiti WalL
+# Graffiti Video Wall
 
-A playful single-page web app where anyone can leave a colorful note on the shared graffiti wall. Notes are stored locally in the browser so you can experiment freely without a backend.
+A collaborative mural experience where every visitor paints on the same digital wall. Identify yourself, pick a brush, and see every stroke appear live—perfect for lobby displays, classrooms, or large-format video walls.
 
 ## Features
 
-- ✏️ Compose notes with your name, message, and a color theme
-- 🧠 Get inspiration with the "Surprise" prompt generator
-- ❤️ Like notes and see real-time counts
-- 🗑️ Delete individual notes or clear the entire wall
-- 💾 Notes persist in `localStorage` across visits on the same browser
+- 🖌️ Draw directly on the shared canvas with mouse, pen, or touch support.
+- 🎨 Choose brush colours and sizes with an instant live preview.
+- 🧑‍🎨 Capture each artist's name and email before they can start painting.
+- 🔄 Real-time synchronisation across browser windows using the Broadcast Channel API (with `localStorage` fallback).
+- 🧹 Clear the entire wall for all connected artists with a single action.
+- 💾 Every stroke persists locally, so refreshing the page keeps the mural intact.
 
 ## Getting started
 
-1. Open `index.html` in your favorite browser.
-2. Start adding messages to the wall.
+1. Serve the project locally (recommended) or open `index.html` directly in a modern browser.
+   - For example: `npx serve` or `python3 -m http.server` from the project root.
+2. Fill in your name and email on the left control panel.
+3. Pick a colour and brush size, then click or tap the canvas to draw.
+4. Open the page in another tab/window to watch collaborative strokes appear instantly.
 
-No build step required—everything runs directly in the browser.
+No build step is required—the entire experience runs in the browser.
 
-## Testing the experience
-
-Want to walk through the full graffiti wall flow? Follow these steps for a quick manual check:
+## Manual test checklist
 
 1. **Launch the wall**
-   - Either double-click `index.html` or run a local server with `npx serve` (requires Node.js) from the project root and open the provided URL.
-2. **Add a note**
-   - Enter a name, pick a color, type a message, and submit. Confirm your note appears instantly in the "Latest tags" panel.
-3. **Engage with reactions**
-   - Click the heart on the new note and verify the like counter increments and persists after refreshing the page.
-4. **Try the prompt generator**
-   - Press "Surprise me" to pre-fill the composer with a random idea, then tweak it as desired before posting.
-5. **Clean up**
-   - Remove a single note via its trash icon, then clear the entire wall using the "Clear wall" button. Refresh once more to ensure everything stays cleared.
+   - Open `index.html` in two separate tabs or windows.
+2. **Set identity**
+   - Enter a name and email in one tab and confirm the identity banner updates.
+3. **Draw a stroke**
+   - Paint on the canvas and verify the stroke appears simultaneously in the second tab.
+4. **Change brush settings**
+   - Adjust colour and size; confirm the preview updates and new strokes reflect the change.
+5. **Persist strokes**
+   - Refresh a tab and ensure the existing artwork is redrawn from storage.
+6. **Clear the wall**
+   - Use the clear button in one tab and confirm both canvases reset.
 
-These steps exercise every interactive control so you can be confident the whole activation works end to end.
-
-## Development tips
-
-- The project uses vanilla JavaScript and CSS.
-- Notes are stored under the `graffiti-wall-notes` key in `localStorage`. You can clear it via the "Clear wall" button or through your browser devtools.
-- To reset likes or messages manually, remove the item from storage and reload the page.
+These steps cover the full collaborative workflow to make sure the video wall delivers a seamless shared experience.
