@@ -10,7 +10,22 @@ const io = new Server(server, {
   cors: {
     origin: "*",
   },
+  /**
+   * Explicitly serve the Socket.IO client bundle so `/socket.io/socket.io.js`
+   * is always available, even in environments that disable it by default.
+   */
+  serveClient: true,
 });
+
+const PUBLIC_DIR = path.join(__dirname, "public");
+const PUBLIC_JS_DIR = path.join(PUBLIC_DIR, "js");
+const SOCKET_IO_CLIENT_BUNDLE = path.join(
+  __dirname,
+  "node_modules",
+  "socket.io",
+  "client-dist",
+  "socket.io.js"
+);
 
 const PORT = process.env.PORT || 3000;
 const MAX_STROKES = 15000;
@@ -21,7 +36,15 @@ const MAX_STROKES = 15000;
  */
 const strokes = [];
 
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(PUBLIC_DIR));
+app.use("/js", express.static(PUBLIC_JS_DIR));
+app.get("/socket.io/socket.io.js", (req, res, next) => {
+  res.sendFile(SOCKET_IO_CLIENT_BUNDLE, (error) => {
+    if (error) {
+      next(error);
+    }
+  });
+});
 
 app.get("/join", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "join.html"));
