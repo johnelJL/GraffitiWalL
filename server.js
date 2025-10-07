@@ -29,12 +29,28 @@ const SOCKET_IO_CLIENT_BUNDLE = path.join(
 
 const PORT = process.env.PORT || 3000;
 const MAX_STROKES = 15000;
+const PUBLIC_PATH_PREFIX = /^\/(?:public\/)+/i;
 
 /**
  * In-memory store of spray events.
  * Each stroke: { x: number, y: number, radius: number, color: string }
  */
 const strokes = [];
+
+app.use((req, res, next) => {
+  if (req.path === "/public") {
+    const query = req.originalUrl.slice(req.path.length);
+    return res.redirect(301, `/${query}`);
+  }
+
+  if (PUBLIC_PATH_PREFIX.test(req.path)) {
+    const normalizedPath = req.path.replace(PUBLIC_PATH_PREFIX, "/");
+    const query = req.originalUrl.slice(req.path.length);
+    return res.redirect(301, `${normalizedPath}${query}`);
+  }
+
+  next();
+});
 
 app.use(express.static(PUBLIC_DIR));
 app.use("/js", express.static(PUBLIC_JS_DIR));
