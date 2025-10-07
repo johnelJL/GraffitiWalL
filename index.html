@@ -3,99 +3,113 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Graffiti WalL</title>
+    <title>Graffiti Video Wall</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <header class="app-header">
-      <h1>Graffiti WalL</h1>
-      <p class="tagline">Leave your mark. Celebrate others.</p>
+      <h1>Graffiti Video Wall</h1>
+      <p class="tagline">Collaborative live painting that fills the room.</p>
     </header>
 
-    <main class="app">
-      <section class="composer" aria-labelledby="composer-title">
-        <div class="composer__heading">
-          <h2 id="composer-title">Add a new note</h2>
-          <button class="composer__random" type="button" id="random-message" aria-label="Surprise me with an idea">
-            🎲 Surprise
-          </button>
+    <main class="app" aria-label="Graffiti studio">
+      <section class="studio" aria-labelledby="studio-title">
+        <div class="studio__heading">
+          <h2 id="studio-title">Your artist station</h2>
+          <p>Introduce yourself, pick your tools and start drawing.</p>
         </div>
-        <form id="note-form" autocomplete="off">
+        <form id="artist-form" class="artist-form" autocomplete="off">
           <div class="field">
-            <label for="author">Name</label>
+            <label for="artist-name">Name</label>
             <input
-              id="author"
-              name="author"
+              id="artist-name"
+              name="artist-name"
               type="text"
+              placeholder="Your name"
               maxlength="40"
-              placeholder="Anonymous artist"
+              required
             />
           </div>
           <div class="field">
-            <label for="message">Message</label>
-            <textarea
-              id="message"
-              name="message"
-              rows="3"
-              maxlength="240"
-              placeholder="Share something encouraging..."
+            <label for="artist-email">Email</label>
+            <input
+              id="artist-email"
+              name="artist-email"
+              type="email"
+              placeholder="you@example.com"
               required
-            ></textarea>
+            />
           </div>
-          <div class="field field--colors">
-            <span>Pick a color</span>
-            <div class="palette" role="radiogroup" aria-label="Note color">
-              <label class="palette__choice" aria-label="Sunrise">
-                <input type="radio" name="color" value="sunrise" checked />
-                <span class="palette__swatch palette__swatch--sunrise"></span>
+
+          <fieldset class="field fieldset" aria-describedby="brush-help">
+            <legend>Brush colour</legend>
+            <p id="brush-help" class="help-text">Choose a shade for your strokes.</p>
+            <div class="palette" role="radiogroup" aria-label="Brush colour">
+              <label class="palette__choice" aria-label="Sunrise orange">
+                <input type="radio" name="brush-color" value="#f97316" checked />
+                <span class="palette__swatch" data-color="#f97316"></span>
               </label>
-              <label class="palette__choice" aria-label="Ocean">
-                <input type="radio" name="color" value="ocean" />
-                <span class="palette__swatch palette__swatch--ocean"></span>
+              <label class="palette__choice" aria-label="Ocean blue">
+                <input type="radio" name="brush-color" value="#0ea5e9" />
+                <span class="palette__swatch" data-color="#0ea5e9"></span>
               </label>
-              <label class="palette__choice" aria-label="Forest">
-                <input type="radio" name="color" value="forest" />
-                <span class="palette__swatch palette__swatch--forest"></span>
+              <label class="palette__choice" aria-label="Forest green">
+                <input type="radio" name="brush-color" value="#22c55e" />
+                <span class="palette__swatch" data-color="#22c55e"></span>
               </label>
-              <label class="palette__choice" aria-label="Sunset">
-                <input type="radio" name="color" value="sunset" />
-                <span class="palette__swatch palette__swatch--sunset"></span>
+              <label class="palette__choice" aria-label="Sunset pink">
+                <input type="radio" name="brush-color" value="#ec4899" />
+                <span class="palette__swatch" data-color="#ec4899"></span>
               </label>
-              <label class="palette__choice" aria-label="Midnight">
-                <input type="radio" name="color" value="midnight" />
-                <span class="palette__swatch palette__swatch--midnight"></span>
+              <label class="palette__choice" aria-label="Midnight violet">
+                <input type="radio" name="brush-color" value="#8b5cf6" />
+                <span class="palette__swatch" data-color="#8b5cf6"></span>
+              </label>
+              <label class="palette__choice" aria-label="Bright yellow">
+                <input type="radio" name="brush-color" value="#facc15" />
+                <span class="palette__swatch" data-color="#facc15"></span>
               </label>
             </div>
+          </fieldset>
+
+          <div class="field">
+            <label for="brush-size">Brush size</label>
+            <input
+              id="brush-size"
+              name="brush-size"
+              type="range"
+              min="2"
+              max="48"
+              value="12"
+              step="1"
+            />
+            <div class="brush-preview" aria-hidden="true">
+              <span>Preview</span>
+              <span class="brush-preview__circle" id="brush-preview"></span>
+            </div>
           </div>
-          <button type="submit" class="button button--primary">Post to the wall</button>
+
+          <div class="field field--actions">
+            <button class="button" id="clear-wall" type="button">Clear wall for everyone</button>
+            <p class="help-text">Hold and drag on the wall to paint. Everyone sees updates instantly.</p>
+          </div>
         </form>
       </section>
 
-      <section class="wall" aria-live="polite">
+      <section class="wall" aria-labelledby="wall-title">
         <header class="wall__header">
-          <h2>Latest notes</h2>
-          <button class="button button--ghost" id="clear-wall" type="button">Clear wall</button>
+          <div>
+            <h2 id="wall-title">Live video wall</h2>
+            <p class="wall__subtitle">Every connected artist draws on the same canvas in real time.</p>
+          </div>
+          <div class="identity" id="identity-display" aria-live="polite"></div>
         </header>
-        <p class="wall__empty" id="empty-state">No notes yet. Be the first to paint the wall!</p>
-        <ul class="wall__notes" id="notes"></ul>
+        <div class="wall__canvas" role="img" aria-label="Collaborative graffiti wall">
+          <canvas id="wall-canvas"></canvas>
+          <div class="wall__hint" id="wall-hint">Click or touch and drag to start painting.</div>
+        </div>
       </section>
     </main>
-
-    <template id="note-template">
-      <li class="note" data-note>
-        <article class="note__body">
-          <header class="note__header">
-            <h3 class="note__author"></h3>
-            <time class="note__timestamp" datetime=""></time>
-          </header>
-          <p class="note__message"></p>
-          <footer class="note__footer">
-            <button class="note__like" type="button" aria-pressed="false">❤️ <span>0</span></button>
-            <button class="note__delete" type="button" aria-label="Delete note">🗑️</button>
-          </footer>
-        </article>
-      </li>
-    </template>
 
     <script src="app.js" type="module"></script>
   </body>
