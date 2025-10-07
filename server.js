@@ -23,6 +23,10 @@ const strokes = [];
 
 app.use(express.static(path.join(__dirname, "public")));
 
+app.get("/styles.css", (req, res) => {
+  res.sendFile(path.join(__dirname, "styles.css"));
+});
+
 app.get("/join", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "join.html"));
 });

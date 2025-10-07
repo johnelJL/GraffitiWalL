@@ -13,8 +13,9 @@ const cursor = document.createElement("div");
 cursor.className = "spray-cursor";
 canvasWrapper.appendChild(cursor);
 
-const socket = io();
-let currentColor = colorButtons[0].dataset.color;
+const socket = createSocket();
+const defaultColor = colorButtons.length ? colorButtons[0].dataset.color : "#ff7a7a";
+let currentColor = defaultColor;
 let drawing = false;
 let lastEmit = 0;
 
@@ -198,3 +199,48 @@ clearButton.addEventListener("click", () => {
 });
 
 updateIdentity();
+
+function createSocket() {
+  if (typeof window !== "undefined" && typeof window.io === "function") {
+    return window.io();
+  }
+
+  const listeners = new Map();
+
+  function notify(event, payload) {
+    const handlers = listeners.get(event);
+    if (!handlers) return;
+    for (const handler of handlers) {
+      try {
+        handler(payload);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }
+
+  const localSocket = {
+    emit(event) {
+      if (event === "clear") {
+        wall.clear();
+        notify("clear");
+      }
+    },
+    on(event, handler) {
+      if (!listeners.has(event)) {
+        listeners.set(event, new Set());
+      }
+      listeners.get(event).add(handler);
+      if (event === "init") {
+        handler(wall.getStrokes());
+      }
+    },
+  };
+
+  const schedule = typeof queueMicrotask === "function" ? queueMicrotask : (cb) => setTimeout(cb, 0);
+  schedule(() => {
+    notify("init", wall.getStrokes());
+  });
+
+  return localSocket;
+}
