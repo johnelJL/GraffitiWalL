@@ -2,11 +2,16 @@ import { createSharedWall } from "./shared-wall.js";
 
 const canvas = document.getElementById("paint-canvas");
 const wall = createSharedWall(canvas);
+const canvasWrapper = canvas.parentElement || document.body;
 const colorButtons = Array.from(document.querySelectorAll(".color-chip"));
 const sizeInput = document.getElementById("brush-size");
 const sizeLabel = document.getElementById("size-label");
 const identityContainer = document.getElementById("identity");
 const clearButton = document.getElementById("clear-button");
+
+const cursor = document.createElement("div");
+cursor.className = "spray-cursor";
+canvasWrapper.appendChild(cursor);
 
 const socket = io();
 let currentColor = colorButtons[0].dataset.color;
@@ -45,6 +50,7 @@ function setActiveColor(button) {
     btn.classList.toggle("is-active", btn === button);
   }
   currentColor = button.dataset.color;
+  updateCursorAppearance();
 }
 
 colorButtons.forEach((button) => {
@@ -52,19 +58,63 @@ colorButtons.forEach((button) => {
   button.addEventListener("click", () => setActiveColor(button));
 });
 
-function describeSize(value) {
-  if (value <= 0.04) return "fine";
-  if (value <= 0.07) return "medium";
-  return "bold";
+function hexToRgba(hex, alpha = 1) {
+  let normalized = hex.replace("#", "");
+  if (normalized.length === 3) {
+    normalized = normalized
+      .split("")
+      .map((char) => char + char)
+      .join("");
+  }
+
+  const value = parseInt(normalized, 16);
+  const r = (value >> 16) & 255;
+  const g = (value >> 8) & 255;
+  const b = value & 255;
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
+function updateCursorAppearance() {
+  cursor.style.borderColor = currentColor;
+  cursor.style.boxShadow = `0 0 14px ${hexToRgba(currentColor, 0.65)}`;
 }
 
 function updateSizeLabel() {
-  const value = parseFloat(sizeInput.value);
-  sizeLabel.textContent = describeSize(value);
+  const value = Math.round(parseFloat(sizeInput.value));
+  sizeLabel.textContent = `${value}px`;
 }
 
-sizeInput.addEventListener("input", updateSizeLabel);
+function updateCursorSize() {
+  const radius = parseFloat(sizeInput.value);
+  const diameter = Math.max(1, radius * 2);
+  cursor.style.width = `${diameter}px`;
+  cursor.style.height = `${diameter}px`;
+}
+
+function getBrushRadiusPx() {
+  return parseFloat(sizeInput.value);
+}
+
+function getNormalizedRadius() {
+  const rect = canvas.getBoundingClientRect();
+  const radiusPx = getBrushRadiusPx();
+  return rect.width > 0 ? radiusPx / rect.width : 0;
+}
+
+function updateCursorPosition(event) {
+  if (!canvasWrapper) return;
+  const wrapperRect = canvasWrapper.getBoundingClientRect();
+  cursor.style.left = `${event.clientX - wrapperRect.left}px`;
+  cursor.style.top = `${event.clientY - wrapperRect.top}px`;
+}
+
+sizeInput.addEventListener("input", () => {
+  updateSizeLabel();
+  updateCursorSize();
+});
 updateSizeLabel();
+updateCursorSize();
+updateCursorAppearance();
 
 function getPointerPosition(event) {
   const rect = canvas.getBoundingClientRect();
@@ -86,7 +136,7 @@ function emitStroke(stroke) {
 
 function spray(event) {
   const { x, y } = getPointerPosition(event);
-  const radius = parseFloat(sizeInput.value);
+  const radius = getNormalizedRadius();
   const stroke = { x, y, radius, color: currentColor };
   wall.addStroke(stroke);
   emitStroke(stroke);
@@ -96,12 +146,26 @@ canvas.addEventListener("pointerdown", (event) => {
   event.preventDefault();
   canvas.setPointerCapture(event.pointerId);
   drawing = true;
+  updateCursorPosition(event);
   spray(event);
 });
 
 canvas.addEventListener("pointermove", (event) => {
+  updateCursorPosition(event);
   if (!drawing) return;
   spray(event);
+});
+
+canvas.addEventListener("pointerenter", (event) => {
+  canvas.classList.add("is-hovered");
+  cursor.classList.add("is-visible");
+  updateCursorPosition(event);
+});
+
+canvas.addEventListener("pointerleave", () => {
+  canvas.classList.remove("is-hovered");
+  cursor.classList.remove("is-visible");
+  drawing = false;
 });
 
 function stopDrawing(event) {

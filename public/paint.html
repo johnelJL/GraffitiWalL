@@ -19,18 +19,18 @@
         <div class="controls-group">
           <h2>Spray color</h2>
           <div class="color-options" role="radiogroup">
-            <button class="color-chip is-active" type="button" data-color="#ff7a7a" aria-label="Flare red"></button>
-            <button class="color-chip" type="button" data-color="#f9c74f" aria-label="Sunny yellow"></button>
-            <button class="color-chip" type="button" data-color="#43aa8b" aria-label="Fresh green"></button>
-            <button class="color-chip" type="button" data-color="#577590" aria-label="Ocean blue"></button>
-            <button class="color-chip" type="button" data-color="#f94144" aria-label="Crimson"></button>
+            <button class="color-chip is-active" type="button" data-color="#ff7a7a" aria-label="Flare red" style="--chip-color: #ff7a7a"></button>
+            <button class="color-chip" type="button" data-color="#f9c74f" aria-label="Sunny yellow" style="--chip-color: #f9c74f"></button>
+            <button class="color-chip" type="button" data-color="#43aa8b" aria-label="Fresh green" style="--chip-color: #43aa8b"></button>
+            <button class="color-chip" type="button" data-color="#577590" aria-label="Ocean blue" style="--chip-color: #577590"></button>
+            <button class="color-chip" type="button" data-color="#f94144" aria-label="Crimson" style="--chip-color: #f94144"></button>
           </div>
         </div>
         <div class="controls-group">
           <h2>Spray size</h2>
           <label class="slider">
-            <span>Radius: <strong id="size-label">medium</strong></span>
-            <input type="range" id="brush-size" min="0.03" max="0.12" step="0.01" value="0.05" />
+            <span>Radius: <strong id="size-label">20px</strong></span>
+            <input type="range" id="brush-size" min="10" max="30" step="1" value="20" />
           </label>
         </div>
         <p class="hint">Press and drag anywhere on the canvas. Everything you spray appears instantly on the video wall.</p>
