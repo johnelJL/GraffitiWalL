@@ -5,6 +5,7 @@ const errorEls = new Map(
     el,
   ])
 );
+const termsCheckbox = form.querySelector("input[name='terms']");
 
 function showError(field, message) {
   const errorEl = errorEls.get(field);
@@ -52,7 +53,7 @@ form.addEventListener("submit", (event) => {
 
   const name = form.elements.name.value.trim();
   const email = form.elements.email.value.trim();
-  const termsAccepted = form.elements.terms.checked;
+  const termsAccepted = termsCheckbox ? termsCheckbox.checked : false;
 
   let hasError = false;
 
