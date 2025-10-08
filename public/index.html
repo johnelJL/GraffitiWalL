@@ -19,20 +19,36 @@
         <div class="sidebar-content">
           <h2>Join in</h2>
           <p>Scan the QR code and spray alongside everyone else in real time.</p>
-          <img
-            id="join-qr"
-            class="qr-image"
-            src="/qr.png"
-            alt="QR code linking to the join page"
-            width="260"
-            height="260"
-          />
+          <figure class="qr-card" aria-labelledby="join-qr-label">
+            <figcaption id="join-qr-label" class="qr-card__label">
+              Scan to open the join page
+            </figcaption>
+            <div class="qr-image" role="presentation" aria-hidden="true"></div>
+            <p class="qr-card__fallback">
+              The QR code is available when the realtime server is running. If you
+              cannot scan it, open
+              <a id="join-link" href="/join">/join</a>
+              on your device.
+            </p>
+          </figure>
           <a class="button" href="/join">Open join page</a>
         </div>
       </aside>
     </main>
 
-    <script src="/socket.io/socket.io.js"></script>
-    <script type="module" src="/js/wall.js"></script>
+    <script>
+      (function () {
+        const joinLink = document.getElementById("join-link");
+        const origin = window.location.origin || "";
+
+        if (joinLink) {
+          const joinUrl = `${origin}/join`;
+          joinLink.href = joinUrl;
+          joinLink.textContent = joinUrl;
+        }
+      })();
+    </script>
+    <script src="./vendor/socket.io.min.js"></script>
+    <script type="module" src="./js/wall.js"></script>
   </body>
 </html>

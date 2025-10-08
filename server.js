@@ -62,6 +62,10 @@ app.get("/socket.io/socket.io.js", (req, res, next) => {
   });
 });
 
+app.get("/styles.css", (req, res) => {
+  res.sendFile(path.join(__dirname, "styles.css"));
+});
+
 app.get("/join", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "join.html"));
 });
